@@ -57,7 +57,7 @@ def order():
 
     #  Credit card security code
     wait.until(clickable((By.XPATH, xpath["cvc"])))
-    ind(xpath["cvc"]).send_keys(data["cvc"])
+    find(xpath["cvc"]).send_keys(data["cvc"])
 
     # Submit purchase
     wait.until(clickable((By.XPATH, xpath["submit"])))
