@@ -9,12 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 # Loading private information from yaml
-with open("secrets.yaml", "r") as file:
-    try:
-        data = yaml.safe_load(file)
-        print("Yaml file read successful")
-    except yaml.YAMLError as exc:
-        print(exc)
+data = yaml.safe_load(open("secrets.yaml"))
 
 # Webdriver settings
 driver = webdriver.Firefox()
@@ -62,7 +57,7 @@ def order():
 
     #  Credit card security code
     wait.until(clickable((By.XPATH, xpath["cvc"])))
-    find(xpath["cvc"]).send_keys(data["cvc"])
+    ind(xpath["cvc"]).send_keys(data["cvc"])
 
     # Submit purchase
     wait.until(clickable((By.XPATH, xpath["submit"])))
