@@ -1,40 +1,73 @@
 #!/usr/bin/env python3
 
+import yaml
+
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, UnexpectedAlertPresentException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+# Loading private information from yaml
+with open("secrets.yaml", "r") as file:
+    try:
+        data = yaml.safe_load(file)
+        print("Yaml file read successful")
+    except yaml.YAMLError as exc:
+        print(exc)
+
+# Webdriver settings
+driver = webdriver.Firefox()
+driver.maximize_window()
+wait = WebDriverWait(driver, 10)
+
+# Short path
+clickable = EC.element_to_be_clickable
+find = driver.find_element_by_xpath
+located = EC.presence_of_element_located
+
+# Xpath location
+xpath = {
+    "account": "//*[@id=\"loginAcc\"]",
+    "add_product": "//*[@id=\"ButtonContainer\"]/button",
+    "credit_card": "/html/body/div[1]/div[2]/div/div/div[2]/dl[1]/dd/ul/li[1]/a",
+    "cvc": "//*[@id=\"multi_CVV2Num\"]",
+    "login": "//*[@id=\"btnLogin\"]",
+    "password": "//*[@id=\"loginPwd\"]",
+    "shopping_car": "//*[@id=\"24hrCartContainer\"]",
+    "submit": "//*[@id=\"btnSubmit\"]",
+}
+
 
 def order():
-    # Webdriver settings
-    driver = webdriver.Firefox()
-    driver.maximize_window()
-    wait = WebDriverWait(driver, 10)
-
     # Set website address
-    driver.get("https://24h.pchome.com.tw/prod/DGBJG9-A900B51SM?fq=/S/DGBJG9")
+    driver.get(data["url"])
 
     # Add product to shopping car
-    wait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[3]/div[2]/div[1]/div[3]/div[2]/div/div[2]/ul["
-                                                         "2]/li/button"))).click()
-    # Redirect to shopping car
-    driver.get("https://ecssl.pchome.com.tw/sys/cflow/fsindex/BigCar/BIGCAR/ItemList")
+    wait.until(located((By.XPATH, xpath["add_product"]))).click()
+
+    # Click the shopping car
+    wait.until(clickable((By.XPATH, xpath["shopping_car"])))
+    driver.execute_script("arguments[0].click()", find(xpath["shopping_car"]))
 
     # Login PChome account
-    wait.until(EC.presence_of_element_located((By.XPATH, "//*[@id=\"loginAcc\"]"))).send_keys("username")
-    wait.until(EC.presence_of_element_located((By.XPATH, "//*[@id=\"loginPwd\"]"))).send_keys("password")
-    wait.until(EC.presence_of_element_located((By.XPATH, "//*[@id=\"btnLogin\"]"))).click()
+    wait.until(located((By.XPATH, xpath["account"]))).send_keys(data["account"])
+    wait.until(located((By.XPATH, xpath["password"]))).send_keys(data["password"])
+    wait.until(located((By.XPATH, xpath["login"]))).click()
+    print("Login successful")
 
-    # Order product
-    wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[2]/div/div/div[2]/dl[1]/dd/ul/li[1]/a")))\
-        .click()
-    wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"btnSubmit\"]"))).click()
-    print("Order is success")
+    # Purchase product with credit card
+    wait.until(clickable((By.XPATH, xpath["credit_card"])))
+    driver.execute_script("arguments[0].click()", find(xpath["credit_card"]))
 
-    # Close browser
-    driver.close()
+    #  Credit card security code
+    wait.until(clickable((By.XPATH, xpath["cvc"])))
+    find(xpath["cvc"]).send_keys(data["cvc"])
+
+    # Submit purchase
+    wait.until(clickable((By.XPATH, xpath["submit"])))
+    driver.execute_script("arguments[0].click()", find(xpath["submit"]))
+    print("Order successful")
 
 
 if __name__ == "__main__":
