@@ -12,7 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 data = yaml.safe_load(open("secrets.yaml"))
 
 # Webdriver settings
-driver = webdriver.Firefox()
+driver = webdriver.Chrome()
 driver.maximize_window()
 wait = WebDriverWait(driver, 10)
 
