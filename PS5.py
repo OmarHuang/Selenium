@@ -25,7 +25,7 @@ located = EC.presence_of_element_located
 xpath = {
     "account": "//*[@id=\"loginAcc\"]",
     "add_product": "//*[@id=\"ButtonContainer\"]/button",
-    "credit_card": "/html/body/div[1]/div[2]/div/div/div[2]/dl[1]/dd/ul/li[1]/a",
+    "credit_card": "//*[@id=\"payment_creditcard\"]/dd/ul/li[1]/a",
     "cvc": "//*[@id=\"multi_CVV2Num\"]",
     "login": "//*[@id=\"btnLogin\"]",
     "password": "//*[@id=\"loginPwd\"]",
