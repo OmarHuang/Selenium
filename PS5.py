@@ -12,7 +12,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 # Loading private information from yaml
 data = yaml.safe_load(open("secrets.yaml"))
 
+# Keep Chrome logins
+options = webdriver.ChromeOptions()
+options.add_argument(data["profile"])
+
 # Webdriver settings
+driver = webdriver.Chrome(options=options)
 driver = webdriver.Chrome()
 driver.maximize_window()
 wait = WebDriverWait(driver, 10)
