@@ -4,7 +4,6 @@ import yaml
 
 from dataclasses import dataclass
 from selenium import webdriver
-from selenium.common import exceptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -96,9 +95,5 @@ if __name__ == "__main__":
         pc.check_status()
         pc.login()
         pc.purchase()
-    except exceptions.TimeoutException as e:
-        print(e.msg)
-    except exceptions.UnexpectedAlertPresentException as e:
-        print(e.alert_text)
-    except exceptions.InvalidSessionIdException as e:
-        print(e.msg)
+    except Exception as e:
+        print(e)
