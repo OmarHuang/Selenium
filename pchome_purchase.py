@@ -73,9 +73,9 @@ class PcHome:
         # Click the shopping car
         shopping_car = wait.until(clickable((By.XPATH, xpath["shopping_car"])))
         driver.execute_script("arguments[0].click()", shopping_car)
-        self.check_login()
+        self.check_logins()
 
-    def check_login(self):
+    def check_logins(self):
         try:
             self.login()
         except Exception as login_exception:
