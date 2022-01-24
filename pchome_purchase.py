@@ -105,7 +105,4 @@ class PcHome:
 
 pc = PcHome()
 if __name__ == "__main__":
-    try:
-        pc.connect()
-    except Exception as e:
-        print(e)
+    pc.connect()
