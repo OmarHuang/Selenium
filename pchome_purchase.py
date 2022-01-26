@@ -45,9 +45,18 @@ class PcHome:
     retry = 1
     url = data["url"]
 
-    def connect(self):
+    def login(self):
+        driver.get("https://ecvip.pchome.com.tw/login/v3/login.htm")
+        WebDriverWait(driver, 1).until(located((By.XPATH, xpath["account"])))
+        find(xpath["account"]).send_keys(self.account)
+        find(xpath["password"]).send_keys(self.password)
+        wait.until(clickable((By.XPATH, xpath["login"]))).click()
+        print("Login successful")
+        self.connect(self.url)
+
+    def connect(self, url):
         # Connect to PcHome website
-        driver.get(self.url)
+        driver.get(url)
         print("Connect successful")
         self.check_status()
 
@@ -73,20 +82,6 @@ class PcHome:
         # Click the shopping car
         shopping_car = wait.until(clickable((By.XPATH, xpath["shopping_car"])))
         driver.execute_script("arguments[0].click()", shopping_car)
-        self.check_logins()
-
-    def check_logins(self):
-        try:
-            self.login()
-        except Exception as login_exception:
-            self.purchase()
-            print(login_exception, "You are already logins")
-
-    def login(self):
-        wait.until(located((By.XPATH, xpath["account"]))).send_keys(self.account)
-        wait.until(located((By.XPATH, xpath["password"]))).send_keys(self.password)
-        wait.until(clickable((By.XPATH, xpath["login"]))).click()
-        print("Login successful")
         self.purchase()
 
     def purchase(self):
@@ -105,4 +100,4 @@ class PcHome:
 
 pc = PcHome()
 if __name__ == "__main__":
-    pc.connect()
+    pc.login()
