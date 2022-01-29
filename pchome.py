@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""This script for auto purchase product."""
-
+"""This for PChome product."""
 import yaml
 
 from selenium import webdriver
@@ -88,8 +87,3 @@ class PChome:
         wait.until(EC.element_to_be_clickable((By.XPATH, xpath["submit"])))
         driver.execute_script("arguments[0].click()", driver.find_element_by_xpath(xpath["submit"]))
         print("Order successful")
-
-
-pc = PChome()
-if __name__ == "__main__":
-    pc.login()

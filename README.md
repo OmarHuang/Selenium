@@ -11,7 +11,7 @@
 4. Fill in your private information in secrets.yaml
 5. Run
  ```
- python3 pchome_purchase.py
+ python3 run.py -p
  ```
  
 ## Note
